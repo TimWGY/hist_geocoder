@@ -310,7 +310,7 @@ def extract_house_number_from_house_number_part(hnumber_part, choice_for_range =
         hnumber = int(hnumber_part)
     return hnumber
 
-def geocode(input_address, input_borough, input_year):
+def geocode(input_address, input_borough, input_year, coordinate_only = False):
     # parse address
     house_number_part, street_name_part = parse_hnumber_and_street_name(standardize_house_number_part_within_address(input_address))
     # get house number
@@ -326,14 +326,16 @@ def geocode(input_address, input_borough, input_year):
         ybs1_id_list = propose_ybs1_id(matched_year, borough_code, street_name, street_index_df)
         street_matched = len(ybs1_id_list)>0
         if street_matched:
-            break
-    possible_coordinates = []
+            break    
+    results = []
     if street_matched:
         # try all matched street
         for ybs1_id in ybs1_id_list:
             coordinate = get_hnumber_coordinate(hnumber, ybs1_id, street_range_df)
             if coordinate is not None:
-                possible_coordinates.append((matched_year, ybs1_id_to_stname_mapping[ybs1_id], hnumber, coordinate))
-    return possible_coordinates
+                results.append((matched_year, borough_code, ybs1_id_to_stname_mapping[ybs1_id], hnumber, coordinate))
+    if coordinate_only:
+        results = [res[-1] for res in results]
+    return results
 
 ##########################################################################################
