@@ -326,6 +326,8 @@ def geocode(input_address, input_borough, input_year, coordinate_only = False):
         ybs1_id_list = propose_ybs1_id(matched_year, borough_code, street_name, street_index_df)
         street_matched = len(ybs1_id_list)>0
         if street_matched:
+            if abs(matched_year - input_year)>10:
+                print('Please note that the best street data we can find for this address is more than 10 years apart from the year you provided. Use caution when interpreting results.')
             break    
     results = []
     if street_matched:
@@ -339,3 +341,7 @@ def geocode(input_address, input_borough, input_year, coordinate_only = False):
     return results
 
 ##########################################################################################
+
+from IPython.display import clear_output
+clear_output()
+print("\nThe geocoder is ready to use. Try running this line of code below:\n\ngeocode('23-25 catharine street', 'manhattan', 1910)\n\n * The input fields are: address, borough, year\n * The output fields are: year_matched, borough_code, standardized_street_name, standardized_house_number, lonlat_coordinates\n\nYou can also limit the output to coordinates only. For example:\n\ngeocode('23-25 catharine street', 'manhattan', 1910, coordinate_only=True)\n\nThis historical geocoder is developed as part of the Mapping Historical New York project (https://mappinghny.com) at Columbia University.\nFor more questions about the geocoder, please contact Tim Wu at gw2415@columbia.edu.\n\n")
