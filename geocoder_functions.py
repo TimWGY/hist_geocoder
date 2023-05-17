@@ -3,6 +3,9 @@
 
 from __future__ import annotations
 
+import os
+os.system('pip install unidecode number-parser==0.3.0 thefuzz python-Levenshtein jellyfish geopandas rtree pyproj mapclassify')
+
 import pandas as pd
 pd.set_option('chained_assignment', None)
 
