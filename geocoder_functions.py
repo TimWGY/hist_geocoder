@@ -10,6 +10,7 @@ import pandas as pd
 pd.set_option('chained_assignment', None)
 
 street_index_df = pd.read_csv('/content/hist_geocoder/street_data/mnbk_streets_index_v20230515.csv')
+street_index_df['street_name_stem'] = street_index_df['street_name_stem'].fillna('')
 ybs1_id_to_stname_mapping = street_index_df.set_index('ybs1_id')['stname'].to_dict()
 street_range_df = pd.read_csv('/content/hist_geocoder/street_data/mnbk_streets_range_v20230515.csv')
 street_range_df['start_end_coordinates'] = street_range_df['start_end_coordinates'].apply(eval)
