@@ -323,6 +323,8 @@ def geocode(input_address, input_borough, input_year, coordinate_only = False):
     house_number_part, street_name_part = parse_hnumber_and_street_name(standardize_house_number_part_within_address(input_address))
     # get house number
     hnumber = extract_house_number_from_house_number_part(house_number_part)
+    if hnumber is None:
+        return []
     # get street name
     street_name = reconstruct_street_name(* parse_street_name(street_name_part))
     # identify borough
