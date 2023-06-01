@@ -320,16 +320,26 @@ def extract_house_number_from_house_number_part(hnumber_part, choice_for_range =
 geocoding_results_cache = {}
 
 def geocode(input_address, input_borough, input_year, coordinates_only = False, verbose = True, use_cache = True):
-    # basic clean address
-    input_address = deaccent_lowercase_remove_most_special(input_address)
-    # parse address
-    house_number_part, street_name_part = parse_hnumber_and_street_name(standardize_house_number_part_within_address(input_address))
-    # get house number
-    hnumber = extract_house_number_from_house_number_part(house_number_part)
+    
+    # determine input type
+    if isinstance(input_address, str):
+        # basic clean address
+        input_address = deaccent_lowercase_remove_most_special(input_address)
+        # parse address
+        house_number_part, street_name_part = parse_hnumber_and_street_name(standardize_house_number_part_within_address(input_address))
+        # get house number
+        hnumber = extract_house_number_from_house_number_part(house_number_part)
+        # get street name
+        street_name = reconstruct_street_name(* parse_street_name(street_name_part))
+    elif isinstance(input_address, tuple):
+        street_name, hnumber = input_address
+    else:
+        raise Exception('Input not in correct format. Use address string or a tuple consisting of street_name and house_number')
+    
+    # return empty when hnumber is not available
     if hnumber is None:
         return []
-    # get street name
-    street_name = reconstruct_street_name(* parse_street_name(street_name_part))
+    
     # identify borough
     borough_code = get_borough_code(input_borough)
     # identify year
