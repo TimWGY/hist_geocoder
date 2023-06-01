@@ -303,10 +303,11 @@ def parse_hnumber_and_street_name(x):
     return hnumber_part, street_name_part
 
 def extract_house_number_from_house_number_part(hnumber_part, choice_for_range = 'first'):
+    hnumber_part = hnumber_part.strip('-')
     if hnumber_part.replace('-','').strip() == '':
         return None
     if '-' in hnumber_part:
-        hnumber, second_hnumber = [int(x) for x in hnumber_part.split('-')] 
+        hnumber, second_hnumber = [int(x) for x in hnumber_part.split('-')[:2]]
         if choice_for_range == 'first':
             hnumber = hnumber
         elif choice_for_range == 'average':
