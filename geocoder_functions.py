@@ -302,7 +302,7 @@ def parse_hnumber_and_street_name(x):
     return hnumber_part, street_name_part
 
 def extract_house_number_from_house_number_part(hnumber_part, choice_for_range = 'first'):
-    if hnumber_part == '':
+    if hnumber_part.replace('-','').strip() == '':
         return None
     if '-' in hnumber_part:
         hnumber, second_hnumber = [int(x) for x in hnumber_part.split('-')] 
