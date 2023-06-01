@@ -298,6 +298,7 @@ def standardize_house_number_part_within_address(x):
 def parse_hnumber_and_street_name(x):
     hnumber_part = re.findall(r'^([\d\-]+) ',x)
     hnumber_part = hnumber_part[0] if len(hnumber_part)>0 else ''
+    hnumber_part = re.sub(r'\-+','-', hnumber_part)
     street_name_part = x[len(hnumber_part):].strip()
     return hnumber_part, street_name_part
 
