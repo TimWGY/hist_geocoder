@@ -105,7 +105,7 @@ def extract_street_name_type(input_string: str, variation_to_standard_street_nam
         return input_string, None, None
 
 def custom_regex_standandization(x):
-    x = re.sub('[^a-z0-9 ]','',x).strip()
+    x = re.sub(r'\s+',' ', re.sub('[^a-z0-9 ]','',x)).strip()
 
     x = re.sub(r'^de (\w+)',r'de\1',x)
     x = re.sub(r'^la (\w+)',r'la\1',x)
