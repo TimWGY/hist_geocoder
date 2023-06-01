@@ -41,7 +41,7 @@ def parse_number_text_with_memory(input_string):
 from collections import OrderedDict
 street_name_type_variation_dict = OrderedDict()
 street_name_type_variation_dict['st'] = ['street', 'stree', 'sreet', 'treet', 'stret', 'stre', 'stee', 'seet', 'reet', 'st']
-street_name_type_variation_dict['dr'] = ['drive', 'driv', 'drie', 'drv', 'dri', 'dr', 'dv', 'de']
+street_name_type_variation_dict['dr'] = ['drive', 'driv', 'drie', 'drv', 'dri', 'dr', 'dv']
 street_name_type_variation_dict['cir'] = ['circle', 'circl', 'cicle', 'circ', 'cir', 'crl', 'cl', 'cr']
 street_name_type_variation_dict['av'] = ['avenue', 'avenu', 'avnue', 'aven', 'avn', 'ave', 'av']
 street_name_type_variation_dict['ct'] = ['court', 'cour', 'cort', 'crt', 'ctr', 'cot', 'ct']
