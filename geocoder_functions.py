@@ -318,7 +318,7 @@ def extract_house_number_from_house_number_part(hnumber_part, choice_for_range =
 
 geocoding_results_cache = {}
 
-def geocode(input_address, input_borough, input_year, coordinate_only = False, verbose = True, use_cache = True):
+def geocode(input_address, input_borough, input_year, coordinates_only = False, verbose = True, use_cache = True):
     # basic clean address
     input_address = deaccent_lowercase_remove_most_special(input_address)
     # parse address
