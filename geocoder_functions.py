@@ -68,10 +68,9 @@ street_name_type_variation_dict['sq'] = ['square', 'sqr', 'sq']
 street_name_type_variation_dict['wy'] = ['way','wy']
 street_name_type_variation_dict['ext'] = ['extension','ext','ex']
 street_name_type_variation_dict['walk'] = ['walk']
-street_name_type_variation_dict['cir'] = ['circle','cir','c']
 street_name_type_variation_dict['pr'] = ['pier']
-street_name_type_variation_dict['wf'] = ['wharf']
-street_name_type_variation_dict['pth'] = ['path']
+street_name_type_variation_dict['wf'] = ['wharf', 'wf']
+street_name_type_variation_dict['pth'] = ['path', 'pth']
 
 variation_to_standard_street_name_type_mapping = {}
 for k,v in street_name_type_variation_dict.items():
