@@ -22,8 +22,11 @@ import numpy as np
 import re
 
 from unidecode import unidecode
-def deaccent_lowercase_remove_special(x):
+def deaccent_lowercase_remove_most_special(x):
     return re.sub(r'\s+',' ',re.sub('[^a-z0-9 \-\&\/]','',unidecode(x).lower())).strip() if isinstance(x,str) else np.nan
+
+def deaccent_lowercase_remove_all_special(x):
+    return re.sub(r'\s+',' ',re.sub('[^a-z0-9 ]','',unidecode(x).lower())).strip() if isinstance(x,str) else np.nan
   
 from number_parser import parse as parse_number_text
 parse_number_text_memory = {}
@@ -315,6 +318,8 @@ def extract_house_number_from_house_number_part(hnumber_part, choice_for_range =
     return hnumber
 
 def geocode(input_address, input_borough, input_year, coordinate_only = False):
+    # basic clean address
+    input_address = deaccent_lowercase_remove_most_special(input_address)
     # parse address
     house_number_part, street_name_part = parse_hnumber_and_street_name(standardize_house_number_part_within_address(input_address))
     # get house number
