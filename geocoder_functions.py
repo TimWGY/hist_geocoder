@@ -243,7 +243,7 @@ def convert_nys_to_wgs(x, y):
     lon, lat = np.round(projection_transformer.transform(x,y)[::-1],6)
     return lon, lat
 
-def get_hnumber_coordinate(hnumber, ybs1_id, street_range_df):
+def get_hnumber_coordinates(hnumber, ybs1_id, street_range_df):
     
     this_street_range_df = street_range_df.query('ybs1_id == @ybs1_id').copy()
     if len(this_street_range_df )==0:
@@ -316,7 +316,9 @@ def extract_house_number_from_house_number_part(hnumber_part, choice_for_range =
         hnumber = int(hnumber_part)
     return hnumber
 
-def geocode(input_address, input_borough, input_year, coordinate_only = False):
+geocoding_results_cache = {}
+
+def geocode(input_address, input_borough, input_year, coordinate_only = False, verbose = True, use_cache = True):
     # basic clean address
     input_address = deaccent_lowercase_remove_most_special(input_address)
     # parse address
@@ -332,21 +334,38 @@ def geocode(input_address, input_borough, input_year, coordinate_only = False):
     # identify year
     ybs1_id_list = []
     street_matched = False
-    for matched_year in get_closest_years(input_year):
+    closest_years = get_closest_years(input_year)
+
+    if use_cache:
+        for matched_year in closest_years:
+            cached_results = geocoding_results_cache.get((matched_year, borough_code, street_name, hnumber), None)
+            if cached_results is not None:
+                if verbose and abs(matched_year - input_year)>10:
+                    print('Please note that the best street data we can find for this address is more than 10 years apart from the year you provided. Use caution when interpreting results.')
+                if coordinates_only:
+                    cached_results = [res[-1] for res in cached_results]
+                return cached_results
+
+    for matched_year in closest_years:
         ybs1_id_list = propose_ybs1_id(matched_year, borough_code, street_name, street_index_df)
         street_matched = len(ybs1_id_list)>0
         if street_matched:
-            if abs(matched_year - input_year)>10:
+            if verbose and abs(matched_year - input_year)>10:
                 print('Please note that the best street data we can find for this address is more than 10 years apart from the year you provided. Use caution when interpreting results.')
-            break    
+            break
+
     results = []
     if street_matched:
         # try all matched street
         for ybs1_id in ybs1_id_list:
-            coordinate = get_hnumber_coordinate(hnumber, ybs1_id, street_range_df)
-            if coordinate is not None:
-                results.append((matched_year, borough_code, ybs1_id_to_stname_mapping[ybs1_id], hnumber, coordinate))
-    if coordinate_only:
+            coordinates = get_hnumber_coordinates(hnumber, ybs1_id, street_range_df)
+            if coordinates is not None:
+                results.append((matched_year, borough_code, ybs1_id_to_stname_mapping[ybs1_id], hnumber, coordinates))
+    
+    if use_cache:
+        geocoding_results_cache[(matched_year, borough_code, street_name, hnumber)] = results
+    
+    if coordinates_only:
         results = [res[-1] for res in results]
     return results
 
